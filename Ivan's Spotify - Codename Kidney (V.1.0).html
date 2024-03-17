@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spotify Clone</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #fff;
+}
+
+.sidebar-left {
+    background-color: #333;
+    padding: 20px;
+    color: #fff;
+    width: 250px;
+    flex-shrink: 0;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    overflow-y: auto;
+    margin-bottom: 6%;
+}
+
+.sidebar h2 {
+    margin-bottom: 20px;
+}
+
+.playlist-item {
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.playlist-item:hover {
+    background-color: #555;
+}
+
+.sidebar-right {
+    background-color: #333;
+    padding: 20px;
+    color: #fff;
+    width: 250px;
+    flex-shrink: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+}
+.sidebar-right img {
+    width: 99%;
+    height: auto;
+}
+
+.main {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    margin-left: 250px;
+}
+
+.main-content {
+    display: none;
+}
+
+.subscription-page {
+    background-color: #333;
+    padding: 20px;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+#container {
+    max-width: 51%;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top:1%;
+    margin-left:23%;
+    margin-right:20%;
+    margin-bottom: 10%;
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    overflow-x: hidden;
+}
+
+h1 {
+    text-align: center;
+}
+
+#playlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#playlist li {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid #555;
+    transition: background-color 0.3s;
+}
+
+#playlist li:hover {
+    background-color: #555;
+}
+
+#playlist li:last-child {
+    border-bottom: none;
+}
+
+.playlist-item {
+    margin-bottom: 20px;
+    margin-right:20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    overflow: hidden;
+    width: 240px;
+    padding: 8px 3px;
+    line-height: 1;
+}
+
+.playlist-item h3 {
+    white-space: nowrap; /* Prevent line breaks */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Display ellipsis for truncated text */
+}
+
+#current-song {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 20px);
+    background-color: #333;
+    padding: 10px;
+    color: #ccc;
+    z-index: 1;
+}
+
+audio {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.playlist-grid {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+}
+
+.playlist-grid .playlist-item {
+    margin-bottom: 20px;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    overflow: visible;
+    word-wrap: break-word;
+    height: 300px;
+    width: 200px;
+    padding: 40px 3px;
+    line-height: 1;
+}
+
+.playlist-grid .playlist-item img {
+    padding: 22px;
+    width: 150px;
+    height: 150px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="sidebar-left">
+    <img id="spotifyLogo" src="spotifylogo.png" alt="Spotify Logo" style="width: 50%; height: auto;">
+        <h2>ShidoNats' Library</h2>
+        <div class="playlist">
+            <div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol. 1 ～Longing for the memorable days～', 'music/vol1/')">
+		<h3>Blue Archive Original Soundtrack Vol. 1 ~Longing for the memorable days~</h3>
+                <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+            </div>
+            <div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol.2 ～Searching for the unknown truth～', 'music/vol2/')">
+                <h3>Blue Archive Original Soundtrack Vol.2 ～Searching for the unknown truth～</h3>
+                <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+            </div>
+            <div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol.3 ～Reaching for the precious time～', 'music/vol3/')">
+                <h3>Blue Archive Original Soundtrack Vol.3 ～Reaching for the precious time～</h3>
+                <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+            </div>
+            <div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol.4 ～Aiming for the ideal freedom～', 'music/vol4/')">
+                <h3>Blue Archive Original Soundtrack Vol.4 ～Aiming for the ideal freedom～</h3>
+                <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+            </div>
+            <div class="playlist-item" onclick="loadPlaylist('Blue Archive In-Game Soundtracks  ～The Cyan Sky of Kivotos～', 'music/others/')">
+                <h3>Blue Archive In-Game Soundtracks ～The Cyan Sky of Kivotos～</h3>
+                <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+            </div>
+            <div class="playlist-item" onclick="loadPlaylist('Japanese Time', 'music/X_S/')">
+                <h3>Japanese Time</h3>
+                <p>Various Artists | Playlist by X_S</p>
+	    </div>
+	    <div class="playlist-item" onclick="loadPlaylist('My Longest Playlist Ever Made', 'music/Tear In My Heart/')">
+   		<h3>My Longest Playlist Ever Made</h3>
+    		<p>Various Artists | Playlist by ShidoNats</p>
+	    </div>
+            </div>
+        </div>
+    </div>
+<div class="main" id="container">
+        </div>
+        </div>
+    </div>
+
+    <div id="current-song">
+        <div id="current-song-text"></div>
+        <audio id="audioPlayer" controls>
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <div class="sidebar-right" onclick="showSubscriptionPage()">
+        <!-- Right sidebar content -->
+        <img src="spotifyad.png" alt="Image Containing Advertisement for Spotify Premium with Button">
+    </div>
+
+<script>
+function showSubscriptionPage() {
+    var container = document.getElementById('container');
+    var playlistPage = document.getElementById('playlist');
+
+    // Subscription page HTML
+    var subscriptionHTML = `
+        <div class="subscription-page" id="subscription-page">
+            <h2>Subscription Plans</h2>
+            <p>Choose a subscription plan:</p>
+            <p>Basic Premium - ₱125/Month | Enjoy Ad-free Music, Higher Quality and Offline Listening up to 50 Songs (Est. 2 Hours of Listening)</p>
+            <p>Premium - ₱150/Month | Enhanced Premium Features with Limitless Offline Listening </p>
+            <p>Student - ₱75/Month | Basic Premium Access for Students</p>
+            <p>Student+ - ₱100/Month | Premium+ Access for Students</p>
+            <p>Family - ₱400/Month | Enjoy Basic Premium Features and share with up to 4 Accounts under the same roof!!</p>
+            <p>Family+ Plan ₱500/Month | Enjoy Premium+ Features and share with up to 4 accounts under the same roof!!</p>
+            <select id="subscription-plans">
+                <option value="Invalid Choice, Please Pick a Valid Choice Below">Pick a Subscription Plan</option>
+                <option value="Student">Student ₱75</option>
+                <option value="Student+">Student+ ₱100</option>
+                <option value="Basic Premium">Basic Premium Plan ₱125</option>
+                <option value="Premium+">Premium+ Plan ₱150</option>
+                <option value="Family">Family ₱400</option>
+                <option value="Family+">Family+ Plan ₱500</option>
+            </select>
+            <select id="mode-of-payment">
+   		 <option value="Invalid Choice, Please Pick a Valid Choice Below">Select Mode of Payment</option>
+  		 <option value="Visa">Visa</option>
+ 		 <option value="Mastercard">Mastercard</option>
+ 		 <option value="PayPal">PayPal</option>
+ 		 <option value="GCash">GCash</option>
+ 		 <option value="Maya">Maya</option>
+ 		 <option value="Smart Communications">Smart Communications</option>
+ 		 <option value="Globe Communications">Globe Communications</option>
+ 		 <option value="Kidney">Kidney</option>
+	     </select>
+            <button onclick="subscribe()">Subscribe</button>
+        </div>
+    `;
+
+    // Show subscription page
+    container.innerHTML = subscriptionHTML;
+}
+
+
+function loadPlaylist(playlistName, directory) {
+    var container = document.getElementById('container');
+    var playlistHTML = '';
+
+    // Depending on the selected playlist, populate the playlistHTML accordingly
+    switch (playlistName) {
+        case 'Blue Archive Original Soundtrack Vol. 1 ～Longing for the memorable days～':
+            playlistHTML = `
+		<h1>Blue Archive Original Soundtrack Vol. 1 <br>～Longing for the memorable days～</h1>
+                <ul id="playlist">
+                <li onclick="playSong('${directory}1-01 Mitsukiyo - Constant Moderato.mp3')">1-01 Mitsukiyo - Constant Moderato</li>
+                <li onclick="playSong('${directory}1-02 Mitsukiyo - Midsummer cat.mp3')">1-02 Mitsukiyo - Midsummer cat</li>
+                <li onclick="playSong('${directory}1-03 KARUT - Connected Sky.mp3')">1-03 KARUT - Connected Sky</li>
+                <li onclick="playSong('${directory}1-04 KARUT - Shooting Stars.mp3')">1-04 KARUT - Shooting Stars</li>
+                <li onclick="playSong('${directory}1-05 KARUT - Step by Step.mp3')">1-05 KARUT - Step by Step</li>
+                <li onclick="playSong('${directory}1-06 Mitsukiyo - MX Adventure.mp3')">1-06 Mitsukiyo - MX Adventure</li>
+                <li onclick="playSong('${directory}1-07 Mitsukiyo - Irasshaimase.mp3')">1-07 Mitsukiyo - Irasshaimase</li>
+                <li onclick="playSong('${directory}1-08 Nor - Daily Routine 247.mp3')">1-08 Nor - Daily Routine 247</li>
+                <li onclick="playSong('${directory}1-09 Mitsukiyo - Future Bossa.mp3')">1-09 Mitsukiyo - Future Bossa</li>
+                <li onclick="playSong('${directory}1-10 Mitsukiyo - Lemonade Diary.mp3')">1-10 Mitsukiyo - Lemonade Diary</li>
+                <li onclick="playSong('${directory}1-11 KARUT - Plug and Play.mp3')">1-11 KARUT - Plug and Play</li>
+                <li onclick="playSong('${directory}1-12 KARUT - Water Drop.mp3')">1-12 KARUT - Water Drop</li>
+                <li onclick="playSong('${directory}1-13 Nor - Signal of Abydos.mp3')">1-13 Nor - Signal of Abydos</li>
+                <li onclick="playSong('${directory}1-14 Nor - Sugar story.mp3')">1-14 Nor - Sugar story</li>
+                <li onclick="playSong('${directory}1-15 Nor - ARES.mp3')">1-15 Nor - ARES</li>
+                <li onclick="playSong('${directory}1-16 Nor - Vibes.mp3')">1-16 Nor - Vibes</li>
+                <li onclick="playSong('${directory}1-17 Nor - Future Lab.mp3')">1-17 Nor - Future Lab</li>
+                <li onclick="playSong('${directory}1-18 Nor - After the Beep.mp3')">1-18 Nor - After the Beep</li>
+                <li onclick="playSong('${directory}1-19 Mitsukiyo - Rolling beat.mp3')">1-19 Mitsukiyo - Rolling beat</li>
+                <li onclick="playSong('${directory}1-20 KARUT - Accelerator.mp3')">1-20 KARUT - Accelerator</li>
+                <li onclick="playSong('${directory}2-01 Mitsukiyo - Mischievous Step.mp3')">2-01 Mitsukiyo - Mischievous Step</li>
+                <li onclick="playSong('${directory}2-02 KARUT - Mechanical JUNGLE.mp3')">2-02 KARUT - Mechanical JUNGLE</li>
+                <li onclick="playSong('${directory}2-03 KARUT - Virtual Storm.mp3')">2-03 KARUT - Virtual Storm</li>
+                <li onclick="playSong('${directory}2-04 KARUT - Tech N Tech.mp3')">2-04 KARUT - Tech N Tech</li>
+                <li onclick="playSong('${directory}2-05 Mitsukiyo - Party time.mp3')">2-05 Mitsukiyo - Party time</li>
+                <li onclick="playSong('${directory}2-06 Mitsukiyo - Endless Carnival.mp3')">2-06 Mitsukiyo - Endless Carnival</li>
+                <li onclick="playSong('${directory}2-07 KARUT - Fade Out.mp3')">2-07 KARUT - Fade Out</li>
+                <li onclick="playSong('${directory}2-08 KARUT - Alert.mp3')">2-08 KARUT - Alert</li>
+                <li onclick="playSong('${directory}2-09 KARUT - CrossFire.mp3')">2-09 KARUT - CrossFire</li>
+                <li onclick="playSong('${directory}2-10 KARUT - Interface.mp3')">2-10 KARUT - Interface</li>
+                <li onclick="playSong('${directory}2-11 KARUT - Out of Control.mp3')">2-11 KARUT - Out of Control</li>
+                <li onclick="playSong('${directory}2-12 KARUT - Mechanical JUNGLE Hard Arrange.mp3')">2-12 KARUT - Mechanical JUNGLE Hard Arrange</li>
+                <li onclick="playSong('${directory}2-13 Nor - Fearful Utopia.mp3')">2-13 Nor - Fearful Utopia</li>
+                <li onclick="playSong('${directory}2-14 Nor - SAKURA PUNCH.mp3')">2-14 Nor - SAKURA PUNCH</li>
+                <li onclick="playSong('${directory}2-15 KARUT - Denshi Toujou!.mp3')">2-15 KARUT - Denshi Toujou!</li>
+                <li onclick="playSong('${directory}2-16 KARUT - Kaiten Screw!!!.mp3')">2-16 KARUT - Kaiten Screw!!!</li>
+                <li onclick="playSong('${directory}2-17 KARUT - CrossFire Hard Arrange.mp3')">2-17 KARUT - CrossFire Hard Arrange</li>
+                <li onclick="playSong('${directory}2-18 KARUT - Fevertime.mp3')">2-18 KARUT - Fevertime</li>
+                <li onclick="playSong('${directory}2-19 KARUT - Library of Omen.mp3')">2-19 KARUT - Library of Omen</li>
+                </ul>
+            `;
+            break;
+
+        case 'Blue Archive Original Soundtrack Vol.2 ～Searching for the unknown truth～':
+            playlistHTML = `
+		<h1>Blue Archive Original Soundtrack Vol.2 <br>～Searching for the unknown truth～</h1>
+                <ul id="playlist">
+                <li onclick="playSong('${directory}1-01 KARUT - Neo City Dive.mp3')">1-01 KARUT - Neo City Dive</li>
+                <li onclick="playSong('${directory}1-02 Mitsukiyo - Pixel Time.mp3')">1-02 Mitsukiyo - Pixel Time</li>
+                <li onclick="playSong('${directory}1-03 KARUT - Hue.mp3')">1-03 KARUT - Hue</li>
+                <li onclick="playSong('${directory}1-04 Mitsukiyo - Koi is Love.mp3')">1-04 Mitsukiyo - Koi is Love</li>
+                <li onclick="playSong('${directory}1-05 Mitsukiyo - Luminous Memory.mp3')">1-05 Mitsukiyo - Luminous Memory</li>
+                <li onclick="playSong('${directory}1-06 KARUT - Water Drop.mp3')">1-06 KARUT - Water Drop</li>
+                <li onclick="playSong('${directory}1-07 KARUT - JACKPOT 777.mp3')">1-07 KARUT - JACKPOT 777</li>
+                <li onclick="playSong('${directory}1-08 Mitsukiyo - Bunny Bunny Carrot Carrot.mp3')">1-08 Mitsukiyo - Bunny Bunny Carrot Carrot</li>
+                <li onclick="playSong('${directory}1-09 Nor - OperationD.mp3')">1-09 Nor - OperationD</li>
+                <li onclick="playSong('${directory}1-10 KARUT - someday, sometime.mp3')">1-10 KARUT - someday, sometime</li>
+                <li onclick="playSong('${directory}2-01 KARUT - Colorful Mess.mp3')">2-01 KARUT - Colorful Mess</li>
+                <li onclick="playSong('${directory}2-02 Nor - Vivid Night.mp3')">2-02 Nor - Vivid Night</li>
+                <li onclick="playSong('${directory}2-03 Mitsukiyo - Snow Pantomime.mp3')">2-03 Mitsukiyo - Snow Pantomime</li>
+                <li onclick="playSong('${directory}2-04 KARUT - Barrier.mp3')">2-04 KARUT - Barrier</li>
+                <li onclick="playSong('${directory}2-05 KARUT - Black Suit.mp3')">2-05 KARUT - Black Suit</li>
+                <li onclick="playSong('${directory}2-06 Nor - Crucial Issue.mp3')">2-06 Nor - Crucial Issue</li>
+                <li onclick="playSong('${directory}2-07 Mitsukiyo - Formless Dream.mp3')">2-07 Mitsukiyo - Formless Dream</li>
+                <li onclick="playSong('${directory}2-08 KARUT - Oxygen Destroyer.mp3')">2-08 KARUT - Oxygen Destroyer</li>
+                <li onclick="playSong('${directory}2-09 KARUT - Undefined Behavior.mp3')">2-09 KARUT - Undefined Behavior</li>
+                <li onclick="playSong('${directory}2-10 Nor - GGF.mp3')">2-10 Nor - GGF</li>
+                <li onclick="playSong('${directory}2-11 Nor - Hello to Halo.mp3')">2-11 Nor - Hello to Halo</li>
+                </ul>
+            `;
+            break;
+
+        case 'Blue Archive Original Soundtrack Vol.3 ～Reaching for the precious time～':
+            playlistHTML = `
+                <ul id="playlist">
+		<h1>Blue Archive Original Soundtrack Vol.3 <br>～Reaching for the precious time～</h1>
+		<li onclick="playSong('${directory}1-01 Nor - Midnight Trip.mp3')">1-01 Nor - Midnight Trip</li>
+		<li onclick="playSong('${directory}1-02 Mitsukiyo - Romantic Smile.mp3')">1-02 Mitsukiyo - Romantic Smile</li>
+		<li onclick="playSong('${directory}1-03 Mitsukiyo - Guruguru Usagi.mp3')">1-03 Mitsukiyo - Guruguru Usagi</li>
+		<li onclick="playSong('${directory}1-04 Mitsukiyo - Hifumi Daisuki.mp3')">1-04 Mitsukiyo - Hifumi Daisuki</li>
+		<li onclick="playSong('${directory}1-05 Mitsukiyo - Coffee Cats.mp3')">1-05 Mitsukiyo - Coffee Cats</li>
+		<li onclick="playSong('${directory}1-06 Mitsukiyo - Lovely Picnic.mp3')">1-06 Mitsukiyo - Lovely Picnic</li>
+		<li onclick="playSong('${directory}1-07 Mitsukiyo - Honey Jam.mp3')">1-07 Mitsukiyo - Honey Jam</li>
+		<li onclick="playSong('${directory}1-08 Mitsukiyo - Dolce Biblioteca.mp3')">1-08 Mitsukiyo - Dolce Biblioteca</li>
+		<li onclick="playSong('${directory}1-09 Mitsukiyo - Colorful Beach.mp3')">1-09 Mitsukiyo - Colorful Beach</li>
+		<li onclick="playSong('${directory}1-10 KARUT - After School Dessert.mp3')">1-10 KARUT - After School Dessert</li>
+		<li onclick="playSong('${directory}1-11 Nor - FEEEEVER TIME.mp3')">1-11 Nor - FEEEEVER TIME</li>
+		<li onclick="playSong('${directory}1-12 Nor - Walkthrough.mp3')">1-12 Nor - Walkthrough</li>
+		<li onclick="playSong('${directory}1-13 Mitsukiyo - Aira.mp3')">1-13 Mitsukiyo - Aira</li>
+		<li onclick="playSong('${directory}2-14 Nor - Aoharu.mp3')">2-14 Nor - Aoharu</li>
+		<li onclick="playSong('${directory}2-15 KARUT - Glitch Street.mp3')">2-15 KARUT - Glitch Street</li>
+		<li onclick="playSong('${directory}2-16 KARUT - NRG FielD.mp3')">2-16 KARUT - NRG FielD</li>
+		<li onclick="playSong('${directory}2-17 Mitsukiyo - Alkaline Tears.mp3')">2-17 Mitsukiyo - Alkaline Tears</li>
+		<li onclick="playSong('${directory}2-18 Mitsukiyo - Kyrie Eleison.mp3')">2-18 Mitsukiyo - Kyrie Eleison</li>
+		<li onclick="playSong('${directory}2-19 Mitsukiyo - Kaphar.mp3')">2-19 Mitsukiyo - Kaphar</li>
+		<li onclick="playSong('${directory}2-20 Mitsukiyo - Morose Dreamer.mp3')">2-20 Mitsukiyo - Morose Dreamer</li>
+		<li onclick="playSong('${directory}2-21 KARUT - Agnus Dei.mp3')">2-21 KARUT - Agnus Dei</li>
+		<li onclick="playSong('${directory}2-22 KARUT - Blood Stained Faith.mp3')">2-22 KARUT - Blood Stained Faith</li>
+		<li onclick="playSong('${directory}2-23 KARUT - Codex of Omen.mp3')">2-23 KARUT - Codex of Omen</li>
+		<li onclick="playSong('${directory}2-24 Nor - RE Aoharu.mp3')">2-24 Nor - RE Aoharu</li>
+		<li onclick="playSong('${directory}2-25 Nor - Moment.mp3')">2-25 Nor - Moment</li>
+		<li onclick="playSong('${directory}2-26 Mitsukiyo - Constant Moderato Piano Arrange.mp3')">2-26 Mitsukiyo - Constant Moderato Piano Arrange</li>
+                </ul>
+            `;
+            break;
+        case 'Blue Archive Original Soundtrack Vol.4 ～Aiming for the ideal freedom～':
+            playlistHTML = `
+                <ul id="playlist">
+		<h1>Blue Archive Original Soundtrack Vol.4 <br>～Aiming for the ideal freedom～</h1>
+		<li onclick="playSong('${directory}1-01 Mitsukiyo - Unwelcome School.mp3')">1-01 Mitsukiyo - Unwelcome School</li>
+		<li onclick="playSong('${directory}1-02 KARUT - Funky Road.mp3')">1-02 KARUT - Funky Road</li>
+		<li onclick="playSong('${directory}1-03 Mitsukiyo - Shady Girls.mp3')">1-03 Mitsukiyo - Shady Girls</li>
+		<li onclick="playSong('${directory}1-04 KARUT - Let me think about it.mp3')">1-04 KARUT - Let me think about it</li>
+		<li onclick="playSong('${directory}1-05 Nor - SAKURA PUNCH Hard Arrange.mp3')">1-05 Nor - SAKURA PUNCH Hard Arrange</li>
+		<li onclick="playSong('${directory}1-06 KARUT - Foolish Days.mp3')">1-06 KARUT - Foolish Days</li>
+		<li onclick="playSong('${directory}1-07 Mitsukiyo - Virtual Storm Hard Arrange.mp3')">1-07 Mitsukiyo - Virtual Storm Hard Arrange</li>
+		<li onclick="playSong('${directory}1-08 KARUT - Alert Hard Arrange.mp3')">1-08 KARUT - Alert Hard Arrange</li>
+		<li onclick="playSong('${directory}1-09 KARUT - Tech N Tech Hard Arrange.mp3')">1-09 KARUT - Tech N Tech Hard Arrange</li>
+		<li onclick="playSong('${directory}1-10 KARUT - Summer Bounce Hard Arrange.mp3')">1-10 KARUT - Summer Bounce Hard Arrange</li>
+		<li onclick="playSong('${directory}1-11 Mitsukiyo - Summer Bounce.mp3')">1-11 Mitsukiyo - Summer Bounce</li>
+		<li onclick="playSong('${directory}1-12 Mitsukiyo - Summertime Archive.mp3')">1-12 Mitsukiyo - Summertime Archive</li><li 					<li onclick="playSong('${directory}1-13 Mitsukiyo - Blue New Battle.mp3')">1-13 Mitsukiyo - Blue New Battle</li>
+		<li onclick="playSong('${directory}1-14 Nor - Tasty New Year.mp3')">1-14 Nor - Tasty New Year</li>
+		<li onclick="playSong('${directory}2-15 KARUT - Starting Pistol.mp3')">2-15 KARUT - Starting Pistol</li>
+		<li onclick="playSong('${directory}2-16 Nor - NERINERI CHALLENGE.mp3')">2-16 Nor - NERINERI CHALLENGE</li>
+		<li onclick="playSong('${directory}2-17 Mitsukiyo - Interface Hard Arrange.mp3')">2-17 Mitsukiyo - Interface Hard Arrange</li>
+		<li onclick="playSong('${directory}2-18 KARUT - Encroached Sky.mp3')">2-18 KARUT - Encroached Sky</li>
+		<li onclick="playSong('${directory}2-19 KARUT - Kaiten Hurricane!!!.mp3')">2-19 KARUT - Kaiten Hurricane!!!</li>
+		<li onclick="playSong('${directory}2-20 Nor - Polyphonic.mp3')">2-20 Nor - Polyphonic</li>
+		<li onclick="playSong('${directory}2-21 KARUT - Ark in the Blood Sky.mp3')">2-21 KARUT - Ark in the Blood Sky</li>
+		<li onclick="playSong('${directory}2-22 KARUT - System All Green.mp3')">2-22 KARUT - System All Green</li>
+		<li onclick="playSong('${directory}2-23 KARUT - Final Destination of Ark.mp3')">2-23 KARUT - Final Destination of Ark</li>
+		<li onclick="playSong('${directory}2-24 KARUT - Step of Terror.mp3')">2-24 KARUT - Step of Terror</li>
+		<li onclick="playSong('${directory}2-25 Nor - Responsibility.mp3')">2-25 Nor - Responsibility</li>
+		<li onclick="playSong('${directory}2-26 Mitsukiyo - Welcome School.mp3')">2-26 Mitsukiyo - Welcome School</li>
+                </ul>
+            `;
+            break;
+        case 'Blue Archive In-Game Soundtracks  ～The Cyan Sky of Kivotos～':
+            playlistHTML = `
+                <ul id="playlist">
+		<h1>Blue Archive In-Game Soundtracks <br>～The Cyan Sky of Kivotos～</h1>
+<li onclick="playSong('${directory}Theme 43 - KIRISAME.mp3')">Theme 43 - KIRISAME</li>
+<li onclick="playSong('${directory}Theme 57 - Han-nari (桜花爛漫お祭り騒ぎ！ Title BGM).mp3')">Theme 57 - Han-nari (桜花爛漫お祭り騒ぎ！ Title BGM)</li>
+<li onclick="playSong('${directory}Theme 62 - merry blue.mp3')">Theme 62 - merry blue</li>
+<li onclick="playSong('${directory}Theme 63 - Blooming Moon.mp3')">Theme 63 - Blooming Moon</li>
+<li onclick="playSong('${directory}Theme 66 - Golden Shangri-la.mp3')">Theme 66 - Golden Shangri-la</li>
+<li onclick="playSong('${directory}Theme 77 - burning love.mp3')">Theme 77 - burning love</li>
+<li onclick="playSong('${directory}Theme 83 - PRST Academy.mp3')">Theme 83 - PRST Academy</li>
+<li onclick="playSong('${directory}Theme 84 - PRST Marching.mp3')">Theme 84 - PRST Marching</li>
+<li onclick="playSong('${directory}Theme 88 - Oriental Drop.mp3')">Theme 88 - Oriental Drop</li>
+<li onclick="playSong('${directory}Theme 89 - The Dragon Express.mp3')">Theme 89 - The Dragon Express</li>
+<li onclick="playSong('${directory}Theme 97 - Blue New Year.mp3')">Theme 97 - Blue New Year</li>
+<li onclick="playSong('${directory}Theme 99 - Nesno wons.mp3')">Theme 99 - Nesno wons</li>
+<li onclick="playSong('${directory}Theme 102 - GIVE ME CHOCO.mp3')">Theme 102 - GIVE ME CHOCO</li>
+<li onclick="playSong('${directory}Theme 108 - Starting Pistol.mp3')">Theme 108 - Starting Pistol</li>
+<li onclick="playSong('${directory}Theme 113 - Usagi Flap.mp3')">Theme 113 - Usagi Flap</li>
+<li onclick="playSong('${directory}Theme 116 - IROHANI HOP.mp3')">Theme 116 - IROHANI HOP</li>
+<li onclick="playSong('${directory}Theme 117 - KARAKURhythm.mp3')">Theme 117 - KARAKURhythm</li>
+<li onclick="playSong('${directory}Theme 120 - DIVE INTO SUMMER.mp3')">Theme 120 - DIVE INTO SUMMER</li>
+<li onclick="playSong('${directory}Theme 121 (アビドスリゾート復旧対策委員会 Battle BGM).mp3')">Theme 121 (アビドスリゾート復旧対策委員会 Battle BGM)</li>
+<li onclick="playSong('${directory}Theme 124 (出張！百夜堂 海の家FC計画 Event BGM).mp3')">Theme 124 (出張！百夜堂 海の家FC計画 Event BGM)</li>
+<li onclick="playSong('${directory}Theme 127 (出張！百夜堂 海の家FC計画 占領戦-Conquest BGM).mp3')">Theme 127 (出張！百夜堂 海の家FC計画 占領戦-Conquest BGM)</li>
+<li onclick="playSong('${directory}Theme 131 (キヴォトス大運動会 晄輪大祭 Event BGM).mp3')">Theme 131 (キヴォトス大運動会 晄輪大祭 Event BGM)</li>
+<li onclick="playSong('${directory}Theme 132.mp3')">Theme 132</li>
+<li onclick="playSong('${directory}Theme 133 (Get Set, Go! ～キヴォトス晄輪大祭～ Event BGM).mp3')">Theme 133 (Get Set, Go! ～キヴォトス晄輪大祭～ Event BGM)</li>
+<li onclick="playSong('${directory}Theme 134.mp3')">Theme 134</li>
+<li onclick="playSong('${directory}Theme 135.mp3')">Theme 135</li>
+<li onclick="playSong('${directory}Theme 137.mp3')">Theme 137</li>
+<li onclick="playSong('${directory}Theme 138.mp3')">Theme 138</li>
+<li onclick="playSong('${directory}Theme 139 (聖堂のメリークリスマス⌈救護騎士団の贈り物⌋ Event BGM).mp3')">Theme 139 (聖堂のメリークリスマス⌈救護騎士団の贈り物⌋ Event BGM)</li>
+<li onclick="playSong('${directory}Theme 140.mp3')">Theme 140</li>
+<li onclick="playSong('${directory}Theme 143 (総力戦 ゴズ Goz Battle BGM).mp3')">Theme 143 (総力戦 ゴズ Goz Battle BGM)</li>
+                </ul>
+            `;
+            break;
+        case 'Japanese Time':
+            playlistHTML = `
+                <ul id="playlist">
+		<h1>Japanese Time</h1>
+<li onclick="playSong('${directory}AndoraRANASOL - Flashback.mp3')">AndoraRANASOL - Flashback</li>
+<li onclick="playSong('${directory}Chinozo - Good-bye Declaration.mp3')">Chinozo - Good-bye Declaration</li>
+<li onclick="playSong('${directory}DECO27 - The Vampire.mp3')">DECO*27 - The Vampire</li>
+<li onclick="playSong('${directory}hachi - パンダヒーロー - ORIGINAL.mp3')">hachi - パンダヒーロー - ORIGINAL</li>
+<li onclick="playSong('${directory}hanerusakana - forget me not.mp3')">hanerusakana - forget me not</li>
+<li onclick="playSong('${directory}hanerusakana - Religiosus.mp3')">hanerusakana - Religiosus</li>
+<li onclick="playSong('${directory}hanerusakana - Torus Girl.mp3')">hanerusakana - Torus Girl</li>
+<li onclick="playSong('${directory}HyuNLyuU - Cross†Over.mp3')">HyuNLyuU - Cross†Over</li>
+<li onclick="playSong('${directory}KradnessReol - おこちゃま戦争.mp3')">KradnessReol - おこちゃま戦争</li>
+<li onclick="playSong('${directory}Reol - No title.mp3')">Reol - No title</li>
+<li onclick="playSong('${directory}Reol - 宵々古今.mp3')">Reol - 宵々古今</li>
+<li onclick="playSong('${directory}TUYU - Being low as dirt, taking what's important from me.mp3')">TUYU - Being low as dirt, taking what's important from me</li>
+<li onclick="playSong('${directory}TUYU - damonisch.mp3')">TUYU - damonisch</li>
+<li onclick="playSong('${directory}TUYU - If there was an Endpoint..mp3')">TUYU - If there was an Endpoint.</li>
+<li onclick="playSong('${directory}TUYU - Under Kids.mp3')">TUYU - Under Kids</li>
+<li onclick="playSong('${directory}YOASOBI - 夜に駆ける.mp3')">YOASOBI - 夜に駆ける</li>
+<li onclick="playSong('${directory}Yuaru - Asu no Yozora Shoukaihan.mp3')">Yuaru - Asu no Yozora Shoukaihan</li>
+<li onclick="playSong('${directory}ツミキ可不 - フォニイ.mp3')">ツミキ可不 - フォニイ</li>
+<li onclick="playSong('${directory}稲葉曇 - Lost Umbrella.mp3')">稲葉曇 - Lost Umbrella</li>
+<li onclick="playSong('${directory}稲葉曇 - ラグトレイン.mp3')">稲葉曇 - ラグトレイン</li>
+                </ul>
+            `;
+            break;
+        case 'My Longest Playlist Ever Made':
+            playlistHTML = `
+                <ul id="playlist">
+		<h1>My Longest Playlist Ever Made</h1>
+		<h5>0:34 - Tear In My Heart</h5>
+<li onclick="playSong('${directory}05 Tear in My Heart.mp3')">05 Tear in My Heart</li>
+<li onclick="playSong('${directory}01 100 Bad Days.mp3')">01 100 Bad Days</li>
+<li onclick="playSong('${directory}01 2U.mp3')">01 2U</li>
+<li onclick="playSong('${directory}01 Alesso & CORSAK - Going Dumb.mp3')">01 Alesso & CORSAK - Going Dumb</li>
+<li onclick="playSong('${directory}01 Alone.mp3')">01 Alone</li>
+<li onclick="playSong('${directory}01 Alps.mp3')">01 Alps</li>
+<li onclick="playSong('${directory}01 Angel With a Shotgun.mp3')">01 Angel With a Shotgun</li>
+<li onclick="playSong('${directory}01 Anna Sun.mp3')">01 Anna Sun</li>
+<li onclick="playSong('${directory}01 At My Worst.mp3')">01 At My Worst</li>
+<li onclick="playSong('${directory}01 Attention.mp3')">01 Attention</li>
+<li onclick="playSong('${directory}01 Axwell Λ Ingrosso - More Than You Know.mp3')">01 Axwell Λ Ingrosso - More Than You Know</li>
+<li onclick="playSong('${directory}01 Be Cool.mp3')">01 Be Cool</li>
+<li onclick="playSong('${directory}01 Be Kind.mp3')">01 Be Kind</li>
+<li onclick="playSong('${directory}01 Be Somebody.mp3')">01 Be Somebody</li>
+<li onclick="playSong('${directory}01 Believer.mp3')">01 Believer</li>
+<li onclick="playSong('${directory}01 Better.mp3')">01 Better</li>
+<li onclick="playSong('${directory}01 Burn the House Down.mp3')">01 Burn the House Down</li>
+<li onclick="playSong('${directory}01 Butterflies.mp3')">01 Butterflies</li>
+<li onclick="playSong('${directory}01 Car Radio.mp3')">01 Car Radio</li>
+<li onclick="playSong('${directory}01 Carry On.mp3')">01 Carry On</li>
+<li onclick="playSong('${directory}01 Chasing Stars.mp3')">01 Chasing Stars</li>
+<li onclick="playSong('${directory}01 Close to You.mp3')">01 Close to You</li>
+<li onclick="playSong('${directory}01 Coming Home.mp3')">01 Coming Home</li>
+<li onclick="playSong('${directory}01 Demons.mp3')">01 Demons</li>
+<li onclick="playSong('${directory}01 Do My Own Thing.mp3')">01 Do My Own Thing</li>
+<li onclick="playSong('${directory}01 Don’t Let Me Down.mp3')">01 Don’t Let Me Down</li>
+<li onclick="playSong('${directory}01 Don’t You Hold Me Down.mp3')">01 Don’t You Hold Me Down</li>
+<li onclick="playSong('${directory}01 Ed Sheeran feat. Khalid - Beautiful People.mp3')">01 Ed Sheeran feat. Khalid - Beautiful People</li>
+<li onclick="playSong('${directory}01 Fallin’.mp3')">01 Fallin’</li>
+<li onclick="playSong('${directory}01 Fire.mp3')">01 Fire</li>
+<li onclick="playSong('${directory}01 Fresh Eyes.mp3')">01 Fresh Eyes</li>
+<li onclick="playSong('${directory}01 Funny.mp3')">01 Funny</li>
+<li onclick="playSong('${directory}01 Geronimo.mp3')">01 Geronimo</li>
+<li onclick="playSong('${directory}01 Ghost Story.mp3')">01 Ghost Story</li>
+<li onclick="playSong('${directory}01 good 4 u.mp3')">01 good 4 u</li>
+<li onclick="playSong('${directory}01 Good Grief.mp3')">01 Good Grief</li>
+<li onclick="playSong('${directory}01 Gravity.mp3')">01 Gravity</li>
+<li onclick="playSong('${directory}01 Haven (from Life Is Strange).mp3')">01 Haven (from Life Is Strange)</li>
+<li onclick="playSong('${directory}01 How Long.mp3')">01 How Long</li>
+<li onclick="playSong('${directory}01 Hozier - Take Me to Church.mp3')">01 Hozier - Take Me to Church</li>
+<li onclick="playSong('${directory}01 I Found You.mp3')">01 I Found You</li>
+<li onclick="playSong('${directory}01 I Like Me Better.mp3')">01 I Like Me Better</li>
+<li onclick="playSong('${directory}01 I\\'ll Follow (Acoustic Version).mp3')">01 I'll Follow (Acoustic Version)</li>
+<li onclick="playSong('${directory}01 ILLENIUM & iann dior - First Time.mp3')">01 ILLENIUM & iann dior - First Time</li>
+<li onclick="playSong('${directory}01 Keep Your Head Up.mp3')">01 Keep Your Head Up</li>
+<li onclick="playSong('${directory}01 Leave a Little Love.mp3')">01 Leave a Little Love</li>
+<li onclick="playSong('${directory}01 Leave Before You Love Me.mp3')">01 Leave Before You Love Me</li>
+<li onclick="playSong('${directory}01 Let It Go.mp3')">01 Let It Go</li>
+<li onclick="playSong('${directory}01 Let Me Go.mp3')">01 Let Me Go</li>
+<li onclick="playSong('${directory}01 Light Switch.mp3')">01 Light Switch</li>
+<li onclick="playSong('${directory}01 Location Unknown ? [Brooklyn Session].mp3')">01 Location Unknown ? [Brooklyn Session]</li>
+<li onclick="playSong('${directory}01 Love & War.mp3')">01 Love & War</li>
+<li onclick="playSong('${directory}01 Make Time.mp3')">01 Make Time</li>
+<li onclick="playSong('${directory}01 Midnight.mp3')">01 Midnight</li>
+<li onclick="playSong('${directory}01 Missing Piece.mp3')">01 Missing Piece</li>
+<li onclick="playSong('${directory}01 Monsters.mp3')">01 Monsters</li>
+<li onclick="playSong('${directory}01 My Life.mp3')">01 My Life</li>
+<li onclick="playSong('${directory}01 Natural.mp3')">01 Natural</li>
+<li onclick="playSong('${directory}01 Never Going Back.mp3')">01 Never Going Back</li>
+<li onclick="playSong('${directory}01 New World.mp3')">01 New World</li>
+<li onclick="playSong('${directory}01 Nobody Else (1991 remix).mp3')">01 Nobody Else (1991 remix)</li>
+<li onclick="playSong('${directory}01 OK Not to Be OK.mp3')">01 OK Not to Be OK</li>
+<li onclick="playSong('${directory}01 On My Way.mp3')">01 On My Way</li>
+<li onclick="playSong('${directory}01 Once in a While.mp3')">01 Once in a While</li>
+<li onclick="playSong('${directory}01 One Call Away Piana-pella.mp3')">01 One Call Away Piana-pella</li>
+<li onclick="playSong('${directory}01 OneRepublic - Run.mp3')">01 OneRepublic - Run</li>
+<li onclick="playSong('${directory}01 Our Song.mp3')">01 Our Song</li>
+<li onclick="playSong('${directory}01 Peer Pressure.mp3')">01 Peer Pressure</li>
+<li onclick="playSong('${directory}01 Peru.mp3')">01 Peru</li>
+<li onclick="playSong('${directory}01 Pompeii.mp3')">01 Pompeii</li>
+<li onclick="playSong('${directory}01 REMEDY.mp3')">01 REMEDY</li>
+<li onclick="playSong('${directory}01 Revolution.mp3')">01 Revolution</li>
+<li onclick="playSong('${directory}01 Rock Bottom.mp3')">01 Rock Bottom</li>
+<li onclick="playSong('${directory}01 Selena Gomez - Back to You.mp3')">01 Selena Gomez - Back to You</li>
+<li onclick="playSong('${directory}01 Set Me on Fire.mp3')">01 Set Me on Fire</li>
+<li onclick="playSong('${directory}01 Shawn Mendes - In My Blood.mp3')">01 Shawn Mendes - In My Blood</li>
+<li onclick="playSong('${directory}01 She Sets the City on Fire.mp3')">01 She Sets the City on Fire</li>
+<li onclick="playSong('${directory}01 Shut Up and Dance (acoustic).mp3')">01 Shut Up and Dance (acoustic)</li>
+<li onclick="playSong('${directory}01 Someone to You (acoustic).mp3')">01 Someone to You (acoustic)</li>
+<li onclick="playSong('${directory}01 Someone to You.mp3')">01 Someone to You</li>
+<li onclick="playSong('${directory}01 Something.mp3')">01 Something</li>
+<li onclick="playSong('${directory}01 Somewhere Only We Know.mp3')">01 Somewhere Only We Know</li>
+<li onclick="playSong('${directory}01 Start a Riot.mp3')">01 Start a Riot</li>
+<li onclick="playSong('${directory}01 STAY.mp3')">01 STAY</li>
+<li onclick="playSong('${directory}01 Sticky.mp3')">01 Sticky</li>
+<li onclick="playSong('${directory}01 Story of My Life.mp3')">01 Story of My Life</li>
+<li onclick="playSong('${directory}01 Strip That Down (acoustic).mp3')">01 Strip That Down (acoustic)</li>
+<li onclick="playSong('${directory}01 Sunroof.mp3')">01 Sunroof</li>
+<li onclick="playSong('${directory}01 Sunshine.mp3')">01 Sunshine</li>
+<li onclick="playSong('${directory}01 Superhero.mp3')">01 Superhero</li>
+<li onclick="playSong('${directory}01 Superheroes.mp3')">01 Superheroes</li>
+<li onclick="playSong('${directory}01 The Chainsmokers - The One.mp3')">01 The Chainsmokers - The One</li>
+<li onclick="playSong('${directory}01 The Chainsmokers feat. Kelsea Ballerini - This Feeling.mp3')">01 The Chainsmokers feat. Kelsea Ballerini - This Feeling</li>
+<li onclick="playSong('${directory}01 The Middle.mp3')">01 The Middle</li>
+<li onclick="playSong('${directory}01 The Other.mp3')">01 The Other</li>
+<li onclick="playSong('${directory}01 The Vamps - Just My Type.mp3')">01 The Vamps - Just My Type</li>
+<li onclick="playSong('${directory}01 There\\'s Nothing Holding Me Back.mp3')">01 There's Nothing Holding' Me Back</li>
+<li onclick="playSong('${directory}01 Thinking out Loud.mp3')">01 Thinking out Loud</li>
+<li onclick="playSong('${directory}01 Undeniable.mp3')">01 Undeniable</li>
+<li onclick="playSong('${directory}01 Unstoppable.mp3')">01 Unstoppable</li>
+<li onclick="playSong('${directory}01 Walk the Moon - Ghostbusters.mp3')">01 Walk the Moon - Ghostbusters</li>
+<li onclick="playSong('${directory}01 We Own the Night.mp3')">01 We Own the Night</li>
+<li onclick="playSong('${directory}01 What We Live For.mp3')">01 What We Live For</li>
+<li onclick="playSong('${directory}01 Why Do I_.mp3')">01 Why Do I_</li>
+<li onclick="playSong('${directory}01 Wolves.mp3')">01 Wolves</li>
+<li onclick="playSong('${directory}01 X Ambassadors - Renegades.mp3')">01 X Ambassadors - Renegades</li>
+<li onclick="playSong('${directory}01 You & Me.mp3')">01 You & Me</li>
+<li onclick="playSong('${directory}01 You Found Me.mp3')">01 You Found Me</li>
+<li onclick="playSong('${directory}01 Zedd, Elley Duhe & Arkadi - Happy Now (acoustic).mp3')">01 Zedd, Elley Duhe & Arkadi - Happy Now (acoustic)</li>
+<li onclick="playSong('${directory}02 A Great Big World - Kaleidoscope.mp3')">02 A Great Big World - Kaleidoscope</li>
+<li onclick="playSong('${directory}02 A.M. RADIO.mp3')">02 A.M. RADIO</li>
+<li onclick="playSong('${directory}02 Alan Walker & Jamie Miller - Running Out of Roses.mp3')">02 Alan Walker & Jamie Miller - Running Out of Roses</li>
+<li onclick="playSong('${directory}02 Alan Walker, Sabrina Carpenter & Farruko - On My Way.mp3')">02 Alan Walker, Sabrina Carpenter & Farruko - On My Way</li>
+<li onclick="playSong('${directory}02 Best Day of My Life.mp3')">02 Best Day of My Life</li>
+<li onclick="playSong('${directory}02 Black and White.mp3')">02 Black and White</li>
+<li onclick="playSong('${directory}02 Castle on the Hill.mp3')">02 Castle on the Hill</li>
+<li onclick="playSong('${directory}02 Drag Me Down.mp3')">02 Drag Me Down</li>
+<li onclick="playSong('${directory}02 Dreamer (Matisse & Sadko remix).mp3')">02 Dreamer (Matisse & Sadko remix)</li>
+<li onclick="playSong('${directory}02 Home.mp3')">02 Home</li>
+<li onclick="playSong('${directory}02 Hotel Ceiling.mp3')">02 Hotel Ceiling</li>
+<li onclick="playSong('${directory}02 Illenium ft. Georgia Ku - Hold On.mp3')">02 Illenium ft. Georgia Ku - Hold On</li>
+<li onclick="playSong('${directory}02 Imagine Dragons - Whatever It Takes.mp3')">02 Imagine Dragons - Whatever It Takes</li>
+<li onclick="playSong('${directory}02 It’s Gonna Make Sense.mp3')">02 It’s Gonna Make Sense</li>
+<li onclick="playSong('${directory}02 I’m Born to Run.mp3')">02 I’m Born to Run</li>
+<li onclick="playSong('${directory}02 Jason Mraz - Have It All.mp3')">02 Jason Mraz - Have It All</li>
+<li onclick="playSong('${directory}02 Lauv - Paris in the Rain.mp3')">02 Lauv - Paris in the Rain</li>
+<li onclick="playSong('${directory}02 Lay It on Me.mp3')">02 Lay It on Me</li>
+<li onclick="playSong('${directory}02 Love Don\\'t Die.mp3')">02 Love Don't Die</li>
+<li onclick="playSong('${directory}02 Maroon 5 - Payphone (clean version).mp3')">02 Maroon 5 - Payphone (clean version)</li>
+<li onclick="playSong('${directory}02 MAX feat. gnash - Lights Down Low (1).mp3')">02 MAX feat. gnash - Lights Down Low (1)</li>
+<li onclick="playSong('${directory}02 MAX feat. gnash - Lights Down Low.mp3')">02 MAX feat. gnash - Lights Down Low</li>
+<li onclick="playSong('${directory}02 Meghan Trainor - Made You Look.mp3')">02 Meghan Trainor - Made You Look</li>
+<li onclick="playSong('${directory}02 Mercy.mp3')">02 Mercy</li>
+<li onclick="playSong('${directory}02 Mess Is Mine.mp3')">02 Mess Is Mine</li>
+<li onclick="playSong('${directory}02 Niall Horan - This Town.mp3')">02 Niall Horan - This Town</li>
+<li onclick="playSong('${directory}02 Ophelia.mp3')">02 Ophelia</li>
+<li onclick="playSong('${directory}02 Shawn Mendes - Stitches.mp3')">02 Shawn Mendes - Stitches</li>
+<li onclick="playSong('${directory}02 Shine a Light.mp3')">02 Shine a Light</li>
+<li onclick="playSong('${directory}02 Silk Sonic - Leave the Door Open.mp3')">02 Silk Sonic - Leave the Door Open</li>
+<li onclick="playSong('${directory}02 Stressed Out.mp3')">02 Stressed Out</li>
+<li onclick="playSong('${directory}02 Television_So Far So Good.mp3')">02 Television_So Far So Good</li>
+<li onclick="playSong('${directory}02 The Script - Never Seen Anything “Quite Like You” (Acoustic).mp3')">02 The Script - Never Seen Anything “Quite Like You” (Acoustic)</li>
+<li onclick="playSong('${directory}02 WALK THE MOON - Can You Handle My Love__.mp3')">02 WALK THE MOON - Can You Handle My Love__</li>
+<li onclick="playSong('${directory}02 X Ambassadors - Unsteady.mp3')">02 X Ambassadors - Unsteady</li>
+<li onclick="playSong('${directory}02 Young Dumb & Broke.mp3')">02 Young Dumb & Broke</li>
+<li onclick="playSong('${directory}02 Zara Larsson - Lush Life.mp3')">02 Zara Larsson - Lush Life</li>
+<li onclick="playSong('${directory}02 Zedd & Elley Duhe - Happy Now.mp3')">02 Zedd & Elley Duhe - Happy Now</li>
+<li onclick="playSong('${directory}03 AJR - 3 O\\'Clock Things.mp3')">03 AJR - 3 O'Clock Things</li>
+<li onclick="playSong('${directory}03 AJR - Weak.mp3')">03 AJR - Weak</li>
+<li onclick="playSong('${directory}03 Alesso feat. Tove Lo - Heroes (We Could Be).mp3')">03 Alesso feat. Tove Lo - Heroes (We Could Be)</li>
+<li onclick="playSong('${directory}03 Always.mp3')">03 Always</li>
+<li onclick="playSong('${directory}03 Anchor.mp3')">03 Anchor</li>
+<li onclick="playSong('${directory}03 Ariana Grande - One Last Time.mp3')">03 Ariana Grande - One Last Time</li>
+<li onclick="playSong('${directory}03 Bad Habits.mp3')">03 Bad Habits</li>
+<li onclick="playSong('${directory}03 Bad Suns - Baby Blue Shades.mp3')">03 Bad Suns - Baby Blue Shades</li>
+<li onclick="playSong('${directory}03 Boyce Avenue feat. Jennel Garcia - Demons.mp3')">03 Boyce Avenue feat. Jennel Garcia - Demons</li>
+<li onclick="playSong('${directory}03 DNCE - Cake by the Ocean.mp3')">03 DNCE - Cake by the Ocean</li>
+<li onclick="playSong('${directory}03 Drive.mp3')">03 Drive</li>
+<li onclick="playSong('${directory}03 Gone, Gone, Gone.mp3')">03 Gone, Gone, Gone</li>
+<li onclick="playSong('${directory}03 Heaven Knows.mp3')">03 Heaven Knows</li>
+<li onclick="playSong('${directory}03 If You Ever Wanna Be in Love.mp3')">03 If You Ever Wanna Be in Love</li>
+<li onclick="playSong('${directory}03 Jon Bellion - All Time Low.mp3')">03 Jon Bellion - All Time Low</li>
+<li onclick="playSong('${directory}03 Keep Me Crazy.mp3')">03 Keep Me Crazy</li>
+<li onclick="playSong('${directory}03 Me and My Broken Heart.mp3')">03 Me and My Broken Heart</li>
+<li onclick="playSong('${directory}03 OneRepublic - Someday.mp3')">03 OneRepublic - Someday</li>
+<li onclick="playSong('${directory}03 Passenger feat. Boy & Bear - Shape of Love.mp3')">03 Passenger feat. Boy & Bear - Shape of Love</li>
+<li onclick="playSong('${directory}03 Ride.mp3')">03 Ride</li>
+<li onclick="playSong('${directory}03 Shut Up and Dance.mp3')">03 Shut Up and Dance</li>
+<li onclick="playSong('${directory}03 Shy Away.mp3')">03 Shy Away</li>
+<li onclick="playSong('${directory}03 Sing Me to Sleep (Marshmello remix).mp3')">03 Sing Me to Sleep (Marshmello remix)</li>
+<li onclick="playSong('${directory}03 Somebody to You.mp3')">03 Somebody to You</li>
+<li onclick="playSong('${directory}03 Sweet and Low.mp3')">03 Sweet and Low</li>
+<li onclick="playSong('${directory}03 The Chainsmokers feat. Halsey - Closer.mp3')">03 The Chainsmokers feat. Halsey - Closer</li>
+<li onclick="playSong('${directory}03 The Lumineers - Nobody Knows.mp3')">03 The Lumineers - Nobody Knows</li>
+<li onclick="playSong('${directory}03 The Remedy (I Won’t Worry).mp3')">03 The Remedy (I Won’t Worry)</li>
+<li onclick="playSong('${directory}03 The Script feat. will.i.am - Hall of Fame.mp3')">03 The Script feat. will.i.am - Hall of Fame</li>
+<li onclick="playSong('${directory}03 Treat You Better.mp3')">03 Treat You Better</li>
+<li onclick="playSong('${directory}03 Wrecked.mp3')">03 Wrecked</li>
+<li onclick="playSong('${directory}03 Zedd feat. Jon Bellion - Beautiful Now.mp3')">03 Zedd feat. Jon Bellion - Beautiful Now</li>
+<li onclick="playSong('${directory}04 AJR feat. Rivers Cuomo - Sober Up (1).mp3')">04 AJR feat. Rivers Cuomo - Sober Up (1)</li>
+<li onclick="playSong('${directory}04 AJR feat. Rivers Cuomo - Sober Up.mp3')">04 AJR feat. Rivers Cuomo - Sober Up</li>
+<li onclick="playSong('${directory}04 Alan Walker, K‐391 & Emelie Hollow - Lily.mp3')">04 Alan Walker, K‐391 & Emelie Hollow - Lily</li>
+<li onclick="playSong('${directory}04 Appreciated.mp3')">04 Appreciated</li>
+<li onclick="playSong('${directory}04 Boston.mp3')">04 Boston</li>
+<li onclick="playSong('${directory}04 Calum Scott - You Are the Reason.mp3')">04 Calum Scott - You Are the Reason</li>
+<li onclick="playSong('${directory}04 Chlorine (album version).mp3')">04 Chlorine (album version)</li>
+<li onclick="playSong('${directory}04 Ghosts.mp3')">04 Ghosts</li>
+<li onclick="playSong('${directory}04 Incredible.mp3')">04 Incredible</li>
+<li onclick="playSong('${directory}04 Jason Mraz - I Won’t Give Up.mp3')">04 Jason Mraz - I Won’t Give Up</li>
+<li onclick="playSong('${directory}04 My Blood.mp3')">04 My Blood</li>
+<li onclick="playSong('${directory}04 Niall Horan - Slow Hands.mp3')">04 Niall Horan - Slow Hands</li>
+<li onclick="playSong('${directory}04 Not a Bad Thing.mp3')">04 Not a Bad Thing</li>
+<li onclick="playSong('${directory}04 Riptide.mp3')">04 Riptide</li>
+<li onclick="playSong('${directory}04 Shape of You.mp3')">04 Shape of You</li>
+<li onclick="playSong('${directory}04 Stand Up.mp3')">04 Stand Up</li>
+<li onclick="playSong('${directory}04 Starving.mp3')">04 Starving</li>
+<li onclick="playSong('${directory}04 That’s What I Like.mp3')">04 That’s What I Like</li>
+<li onclick="playSong('${directory}04 The Man Who Can’t Be Moved.mp3')">04 The Man Who Can’t Be Moved</li>
+<li onclick="playSong('${directory}04 The Scientist.mp3')">04 The Scientist</li>
+<li onclick="playSong('${directory}04 The Score - Born for This.mp3')">04 The Score - Born for This</li>
+<li onclick="playSong('${directory}04 X Ambassadors - BOOM.mp3')">04 X Ambassadors - BOOM</li>
+<li onclick="playSong('${directory}05 AJR - Drama.mp3')">05 AJR - Drama</li>
+<li onclick="playSong('${directory}05 Andy Grammer - Don’t Give Up on Me.mp3')">05 Andy Grammer - Don’t Give Up on Me</li>
+<li onclick="playSong('${directory}05 Axwell Λ Ingrosso - Renegade.mp3')">05 Axwell Λ Ingrosso - Renegade</li>
+<li onclick="playSong('${directory}05 Babylon.mp3')">05 Babylon</li>
+<li onclick="playSong('${directory}05 Bon Jovi - Livin’ on a Prayer.mp3')">05 Bon Jovi - Livin’ on a Prayer</li>
+<li onclick="playSong('${directory}05 Breakeven (Falling to Pieces).mp3')">05 Breakeven (Falling to Pieces)</li>
+<li onclick="playSong('${directory}05 Charlie Puth featuring Selena Gomez - We Don’t Talk Anymore.mp3')">05 Charlie Puth featuring Selena Gomez - We Don’t Talk Anymore</li>
+<li onclick="playSong('${directory}05 Dua Lipa - IDGAF.mp3')">05 Dua Lipa - IDGAF</li>
+<li onclick="playSong('${directory}05 Ed Sheeran - Bad Habits.mp3')">05 Ed Sheeran - Bad Habits</li>
+<li onclick="playSong('${directory}05 Justin Bieber - Love Yourself.mp3')">05 Justin Bieber - Love Yourself</li>
+<li onclick="playSong('${directory}05 Niall Horan - Too Much to Ask.mp3')">05 Niall Horan - Too Much to Ask</li>
+<li onclick="playSong('${directory}05 OneRepublic - Rescue Me.mp3')">05 OneRepublic - Rescue Me</li>
+<li onclick="playSong('${directory}05 Saturday.mp3')">05 Saturday</li>
+<li onclick="playSong('${directory}05 The Chainsmokers & Coldplay - Something Just Like This.mp3')">05 The Chainsmokers & Coldplay - Something Just Like This</li>
+<li onclick="playSong('${directory}05 Waves.mp3')">05 Waves</li>
+<li onclick="playSong('${directory}05 Yellow.mp3')">05 Yellow</li>
+<li onclick="playSong('${directory}05 Zedd feat. Foxes - Clarity.mp3')">05 Zedd feat. Foxes - Clarity</li>
+<li onclick="playSong('${directory}06 AJR - Adventure Is Out There.mp3')">06 AJR - Adventure Is Out There</li>
+<li onclick="playSong('${directory}06 ayokay feat. Jeremy Zucker - Stay With Me.mp3')">06 ayokay feat. Jeremy Zucker - Stay With Me</li>
+<li onclick="playSong('${directory}06 Be Alright.mp3')">06 Be Alright</li>
+<li onclick="playSong('${directory}06 Boyce Avenue - Beautiful Soul.mp3')">06 Boyce Avenue - Beautiful Soul</li>
+<li onclick="playSong('${directory}06 Good Life.mp3')">06 Good Life</li>
+<li onclick="playSong('${directory}06 Hit It.mp3')">06 Hit It</li>
+<li onclick="playSong('${directory}06 The Chainsmokers - Sick Boy.mp3')">06 The Chainsmokers - Sick Boy</li>
+<li onclick="playSong('${directory}06 Wild Love.mp3')">06 Wild Love</li>
+<li onclick="playSong('${directory}07 AJR - Bang!.mp3')">07 AJR - Bang!</li>
+<li onclick="playSong('${directory}07 American Authors - Deep Water.mp3')">07 American Authors - Deep Water</li>
+<li onclick="playSong('${directory}07 Axwell Λ Ingrosso - Sun Is Shining.mp3')">07 Axwell Λ Ingrosso - Sun Is Shining</li>
+<li onclick="playSong('${directory}07 Go Big or Go Home.mp3')">07 Go Big or Go Home</li>
+<li onclick="playSong('${directory}07 Gryffin & Elley Duhe - Tie Me Down (Steve Aoki remix).mp3')">07 Gryffin & Elley Duhe - Tie Me Down (Steve Aoki remix)</li>
+<li onclick="playSong('${directory}07 Kamikaze.mp3')">07 Kamikaze</li>
+<li onclick="playSong('${directory}07 Lauv - Feelings.mp3')">07 Lauv - Feelings</li>
+<li onclick="playSong('${directory}07 Miles.mp3')">07 Miles</li>
+<li onclick="playSong('${directory}07 Say Love.mp3')">07 Say Love</li>
+<li onclick="playSong('${directory}07 State Lines.mp3')">07 State Lines</li>
+<li onclick="playSong('${directory}07 The Best Is Yet to Come.mp3')">07 The Best Is Yet to Come</li>
+<li onclick="playSong('${directory}07 Tori Kelly feat. Ed Sheeran - I Was Made for Loving You (1).mp3')">07 Tori Kelly feat. Ed Sheeran - I Was Made for Loving You (1)</li>
+<li onclick="playSong('${directory}07 Tori Kelly feat. Ed Sheeran - I Was Made for Loving You.mp3')">07 Tori Kelly feat. Ed Sheeran - I Was Made for Loving You</li>
+<li onclick="playSong('${directory}07 Viva la Vida.mp3')">07 Viva la Vida</li>
+<li onclick="playSong('${directory}07 Wiz Khalifa feat. Charlie Puth - See You Again.mp3')">07 Wiz Khalifa feat. Charlie Puth - See You Again</li>
+<li onclick="playSong('${directory}07 Zara Larsson & MNEK - Never Forget You.mp3')">07 Zara Larsson & MNEK - Never Forget You</li>
+<li onclick="playSong('${directory}08 Boulevard Of Broken Dreams.mp3')">08 Boulevard Of Broken Dreams</li>
+<li onclick="playSong('${directory}08 Butterflies.mp3')">08 Butterflies</li>
+<li onclick="playSong('${directory}08 Calvin Harris - Summer.mp3')">08 Calvin Harris - Summer</li>
+<li onclick="playSong('${directory}08 Dance With Me.mp3')">08 Dance With Me</li>
+<li onclick="playSong('${directory}08 Georgia.mp3')">08 Georgia</li>
+<li onclick="playSong('${directory}08 Glad You Came.mp3')">08 Glad You Came</li>
+<li onclick="playSong('${directory}08 Karma.mp3')">08 Karma</li>
+<li onclick="playSong('${directory}08 Sinner.mp3')">08 Sinner</li>
+<li onclick="playSong('${directory}08 Speakerphone.mp3')">08 Speakerphone</li>
+<li onclick="playSong('${directory}08 The Chainsmokers - Paris.mp3')">08 The Chainsmokers - Paris</li>
+<li onclick="playSong('${directory}08 The Vamps feat. Maggie Lindemann - Personal.mp3')">08 The Vamps feat. Maggie Lindemann - Personal</li>
+<li onclick="playSong('${directory}08 Work This Body.mp3')">08 Work This Body</li>
+<li onclick="playSong('${directory}09 Axwell Λ Ingrosso - I Love You.mp3')">09 Axwell Λ Ingrosso - I Love You</li>
+<li onclick="playSong('${directory}09 Boyce Avenue feat. Hannah Trigwell - The Scientist.mp3')">09 Boyce Avenue feat. Hannah Trigwell - The Scientist</li>
+<li onclick="playSong('${directory}09 Justin Bieber - Hold On.mp3')">09 Justin Bieber - Hold On</li>
+<li onclick="playSong('${directory}09 Passenger Seat.mp3')">09 Passenger Seat</li>
+<li onclick="playSong('${directory}09 The Chainsmokers - Honest.mp3')">09 The Chainsmokers - Honest</li>
+<li onclick="playSong('${directory}1-02 Chariot.mp3')">1-02 Chariot</li>
+<li onclick="playSong('${directory}1-02 Hold Back the River.mp3')">1-02 Hold Back the River</li>
+<li onclick="playSong('${directory}1-02 HONNE & NIKI - COMING HOME.mp3')">1-02 HONNE & NIKI - COMING HOME</li>
+<li onclick="playSong('${directory}1-02 Jason Mraz - I\\'m Yours.mp3')">1-02 Jason Mraz - I'm Yours</li>
+<li onclick="playSong('${directory}1-02 Let Her Go (1).mp3')">1-02 Let Her Go (1)</li>
+<li onclick="playSong('${directory}1-02 Let Her Go.mp3')">1-02 Let Her Go</li>
+<li onclick="playSong('${directory}1-02 Over My Head (Cable Car).mp3')">1-02 Over My Head (Cable Car)</li>
+<li onclick="playSong('${directory}1-03 How to Save a Life.mp3')">1-03 How to Save a Life</li>
+<li onclick="playSong('${directory}1-03 ILLENIUM & BANNERS - Hurts Like This.mp3')">1-03 ILLENIUM & BANNERS - Hurts Like This</li>
+<li onclick="playSong('${directory}1-03 Jason Mraz feat. Colbie Caillat - Lucky.mp3')">1-03 Jason Mraz feat. Colbie Caillat - Lucky</li>
+<li onclick="playSong('${directory}1-03 Let It Go.mp3')">1-03 Let It Go</li>
+<li onclick="playSong('${directory}1-04 Demons.mp3')">1-04 Demons</li>
+<li onclick="playSong('${directory}1-04 Gryffin & Elley Duhe - Tie Me Down.mp3')">1-04 Gryffin & Elley Duhe - Tie Me Down</li>
+<li onclick="playSong('${directory}1-06 Photograph.mp3')">1-06 Photograph</li>
+<li onclick="playSong('${directory}1-07 The Vamps - I Found a Girl.mp3')">1-07 The Vamps - I Found a Girl</li>
+<li onclick="playSong('${directory}1-16 Gryffin feat. Katie Pearlman - Nobody Compares to You.mp3')">1-16 Gryffin feat. Katie Pearlman - Nobody Compares to You</li>
+<li onclick="playSong('${directory}10 Alan Walker, Noah Cyrus & Digital Farm Animals feat. Juliander - All Falls Down (1).mp3')">10 Alan Walker, Noah Cyrus & Digital Farm Animals feat. Juliander - All Falls Down (1)</li>
+<li onclick="playSong('${directory}10 Alan Walker, Noah Cyrus & Digital Farm Animals feat. Juliander - All Falls Down.mp3')">10 Alan Walker, Noah Cyrus & Digital Farm Animals feat. Juliander - All Falls Down</li>
+<li onclick="playSong('${directory}10 Follow You.mp3')">10 Follow You</li>
+<li onclick="playSong('${directory}10 Only.mp3')">10 Only</li>
+<li onclick="playSong('${directory}10 Owl City - This Isn’t the End.mp3')">10 Owl City - This Isn’t the End</li>
+<li onclick="playSong('${directory}10 Pocket Full of Gold.mp3')">10 Pocket Full of Gold</li>
+<li onclick="playSong('${directory}10 Thunder.mp3')">10 Thunder</li>
+<li onclick="playSong('${directory}11 Alan Walker, Au_Ra & Tomine Harket - Darkside.mp3')">11 Alan Walker, Au_Ra & Tomine Harket - Darkside</li>
+<li onclick="playSong('${directory}11 Could This Be Love.mp3')">11 Could This Be Love</li>
+<li onclick="playSong('${directory}11 Hailee Steinfeld - Love Myself.mp3')">11 Hailee Steinfeld - Love Myself</li>
+<li onclick="playSong('${directory}11 Happier.mp3')">11 Happier</li>
+<li onclick="playSong('${directory}11 Hometown.mp3')">11 Hometown</li>
+<li onclick="playSong('${directory}11 Illenium & The Chainsmokers ft. Lennon Stella - Takeaway.mp3')">11 Illenium & The Chainsmokers ft. Lennon Stella - Takeaway</li>
+<li onclick="playSong('${directory}11 Liam Payne feat. Quavo - Strip That Down.mp3')">11 Liam Payne feat. Quavo - Strip That Down</li>
+<li onclick="playSong('${directory}11 OneRepublic - Something I Need.mp3')">11 OneRepublic - Something I Need</li>
+<li onclick="playSong('${directory}11 The Vamps & Martin Jensen - Middle of the Night.mp3')">11 The Vamps & Martin Jensen - Middle of the Night</li>
+<li onclick="playSong('${directory}11 You Got Me.mp3')">11 You Got Me</li>
+<li onclick="playSong('${directory}12 AJR - Way Less Sad.mp3')">12 AJR - Way Less Sad</li>
+<li onclick="playSong('${directory}12 Alan Walker - Alone.mp3')">12 Alan Walker - Alone</li>
+<li onclick="playSong('${directory}12 Be Still.mp3')">12 Be Still</li>
+<li onclick="playSong('${directory}12 Fire and Rain.mp3')">12 Fire and Rain</li>
+<li onclick="playSong('${directory}12 Jon Bellion - Kingdom Come.mp3')">12 Jon Bellion - Kingdom Come</li>
+<li onclick="playSong('${directory}12 Marshmello & Bastille - Happier.mp3')">12 Marshmello & Bastille - Happier</li>
+<li onclick="playSong('${directory}12 The Vamps & Matoma - All Night.mp3')">12 The Vamps & Matoma - All Night</li>
+<li onclick="playSong('${directory}13 Boyce Avenue feat. Beatrice Miller - We Can\\'t Stop.mp3')">13 Boyce Avenue feat. Beatrice Miller - We Can't Stop</li>
+<li onclick="playSong('${directory}13 Hey There Delilah.mp3')">13 Hey There Delilah</li>
+<li onclick="playSong('${directory}13 Lost in the Wild.mp3')">13 Lost in the Wild</li>
+<li onclick="playSong('${directory}13 Mike Posner - I took a Pill in Ibiza (SeeB remix).mp3')">13 Mike Posner - I took a Pill in Ibiza (SeeB remix)</li>
+<li onclick="playSong('${directory}13 The Script - I Want It All.mp3')">13 The Script - I Want It All</li>
+<li onclick="playSong('${directory}14 Bebe Rexha feat. Florida Georgia Line - Meant to Be.mp3')">14 Bebe Rexha feat. Florida Georgia Line - Meant to Be</li>
+<li onclick="playSong('${directory}14 Blue (Da Ba Dee) (extended mix).mp3')">14 Blue (Da Ba Dee) (extended mix)</li>
+<li onclick="playSong('${directory}14 Illenium with X Ambassadors - In Your Arms.mp3')">14 Illenium with X Ambassadors - In Your Arms</li>
+<li onclick="playSong('${directory}14 Lauv with Troye Sivan - i’m so tired….mp3')">14 Lauv with Troye Sivan - i’m so tired…</li>
+<li onclick="playSong('${directory}14 Shawn Mendes - Imagination.mp3')">14 Shawn Mendes - Imagination</li>
+<li onclick="playSong('${directory}14 Yellow Claw feat. Stor-I - Another Life.mp3')">14 Yellow Claw feat. Stor-I - Another Life</li>
+<li onclick="playSong('${directory}14 チャーリー・プース feat. Wale - Marvin Gaye (remix).mp3')">14 チャーリー・プース feat. Wale - Marvin Gaye (remix)</li>
+<li onclick="playSong('${directory}15 Collide (acoustic).mp3')">15 Collide (acoustic)</li>
+<li onclick="playSong('${directory}15 Real Life.mp3')">15 Real Life</li>
+<li onclick="playSong('${directory}15 Wake Me Up When September Ends.mp3')">15 Wake Me Up When September Ends</li>
+<li onclick="playSong('${directory}16 Alan Walker feat. Gavin James - Tired.mp3')">16 Alan Walker feat. Gavin James - Tired</li>
+<li onclick="playSong('${directory}17 Going Home.mp3')">17 Going Home</li>
+<li onclick="playSong('${directory}17 Lauv - Never Not.mp3')">17 Lauv - Never Not</li>
+<li onclick="playSong('${directory}18 Alan Walker - The Spectre.mp3')">18 Alan Walker - The Spectre</li>
+<li onclick="playSong('${directory}2-04 Calvin Harris & Dua Lipa - One Kiss.mp3')">2-04 Calvin Harris & Dua Lipa - One Kiss</li>
+<li onclick="playSong('${directory}2-05 Thinking Out Loud.mp3')">2-05 Thinking Out Loud</li>
+<li onclick="playSong('${directory}2-08 I Don\\'t Want to Be.mp3')">2-08 I Don't Want to Be</li>
+<li onclick="playSong('${directory}2-14 James TW - When You Love Someone.mp3')">2-14 James TW - When You Love Someone</li>
+<li onclick="playSong('${directory}24 Hailee Steinfeld - Flashlight (Sweet Life remix).mp3')">24 Hailee Steinfeld - Flashlight (Sweet Life remix)</li>
+<li onclick="playSong('${directory}25 Oh My Love.mp3')">25 Oh My Love</li>
+<li onclick="playSong('${directory}Andy Grammer Covers \\'All Time Low\\'.mp3')">Andy Grammer Covers 'All Time Low'</li>
+<li onclick="playSong('${directory}Carry On (Acoustic).mp3')">Carry On (Acoustic)</li>
+<li onclick="playSong('${directory}Dominoes.mp3')">Dominoes</li>
+<li onclick="playSong('${directory}Everyone\\'s Doing Better than Me.mp3')">Everyone's Doing Better than Me</li>
+<li onclick="playSong('${directory}Flesh & Blood (feat. Smallpools).mp3')">Flesh & Blood (feat. Smallpools)</li>
+<li onclick="playSong('${directory}Good Things Fall Apart.mp3')">Good Things Fall Apart</li>
+<li onclick="playSong('${directory}How to Save a Life (Accoustic).mp3')">How to Save a Life (Accoustic)</li>
+<li onclick="playSong('${directory}I Don\\'t Love You (I'm Just Lonely).mp3')">I Don't Love You (I'm Just Lonely)</li>
+<li onclick="playSong('${directory}I Must Be in a Good Place Now.mp3')">I Must Be in a Good Place Now</li>
+<li onclick="playSong('${directory}I Want You With Me.mp3')">I Want You With Me</li>
+<li onclick="playSong('${directory}If I Didn\\'t Have You.mp3')">If I Didn't Have You</li>
+<li onclick="playSong('${directory}Is This Love.mp3')">Is This Love</li>
+<li onclick="playSong('${directory}It Ain’t Me.mp3')">It Ain’t Me</li>
+<li onclick="playSong('${directory}Just To Know You\\'re There.mp3')">Just To Know You're There</li>
+<li onclick="playSong('${directory}Justin Bieber - What Do You Mean.mp3')">Justin Bieber - What Do You Mean</li>
+<li onclick="playSong('${directory}Lease On Life.mp3')">Lease On Life</li>
+<li onclick="playSong('${directory}Moonlight Over Paris.mp3')">Moonlight Over Paris</li>
+<li onclick="playSong('${directory}New Blood (Myon Summer Of Love Mix-Audio) ft. Boy Matthews.mp3')">New Blood (Myon Summer Of Love Mix-Audio) ft. Boy Matthews</li>
+<li onclick="playSong('${directory}Nights With You.mp3')">Nights With You</li>
+<li onclick="playSong('${directory}One Day.mp3')">One Day</li>
+<li onclick="playSong('${directory}One Foot.mp3')">One Foot</li>
+<li onclick="playSong('${directory}One Right Now.mp3')">One Right Now</li>
+<li onclick="playSong('${directory}Plans.mp3')">Plans</li>
+<li onclick="playSong('${directory}Raincoat (Acoustic).mp3')">Raincoat (Acoustic)</li>
+<li onclick="playSong('${directory}Serenade.mp3')">Serenade</li>
+<li onclick="playSong('${directory}something special.mp3')">something special</li>
+<li onclick="playSong('${directory}The Riddle (feat. Lateshift) (2).mp3')">The Riddle (feat. Lateshift) (2)</li>
+<li onclick="playSong('${directory}The Riddle (feat. Lateshift).mp3')">The Riddle (feat. Lateshift)</li>
+<li onclick="playSong('${directory}This Time is Right.mp3')">This Time is Right</li>
+<li onclick="playSong('${directory}Wasted Love (Acoustic).mp3')">Wasted Love (Acoustic)</li>
+<li onclick="playSong('${directory}What If.mp3')">What If</li>
+                </ul>
+            `;
+            break;
+
+
+        // Add cases for other playlists similarly
+
+        default:
+            playlistHTML = '<p>No songs found for the selected playlist.</p>';
+            break;
+    }
+
+    // Load playlist into container
+    container.innerHTML = playlistHTML;
+}
+
+
+function playSong(filename) {
+    var audioPlayer = document.getElementById('audioPlayer');
+    audioPlayer.src = filename;
+    audioPlayer.play();
+    var songTitle = filename.split('/').pop().replace('.mp3', '');
+    document.getElementById('current-song-text').innerHTML = 'Now Playing: ' + songTitle;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the Spotify logo image element
+    var spotifyLogo = document.getElementById("spotifyLogo");
+    
+    // Add click event listener to the Spotify logo
+    spotifyLogo.addEventListener("click", function() {
+        loadHome();
+    });
+});
+
+function loadHome() {
+    var homeContent = `
+        <div id="homeContent">
+            <h1 align="left"><p>Welcome to Spotify</p></h1>
+            <p>Support my work for Subscribing to Premium at the Right Sidebar</p>
+        </div>
+        <div class="playlist-grid">
+<div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol. 1 ～Longing for the memorable days～', 'music/vol1/')">
+    <img src="vol1.jpg" alt="Blue Archive Vol1 Album Cover">
+    <h3>Blue Archive Original Soundtrack Vol. 1 ~Longing for the memorable days~</h3>
+    <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+</div>
+
+<div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol.2 ～Searching for the unknown truth～', 'music/vol2/')">
+    <img src="vol2.jpg" alt="Blue Archive Vol2 Album Cover">
+    <h3>Blue Archive Original Soundtrack Vol.2 ～Searching for the unknown truth～</h3>
+    <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+</div>
+<div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol.3 ～Reaching for the precious time～', 'music/vol3/')">
+    <img src="vol3.jpg" alt="Blue Archive Vol3 Album Cover">
+    <h3>Blue Archive Original Soundtrack Vol.3 ～Reaching for the precious time～</h3>
+    <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+</div>
+<div class="playlist-item" onclick="loadPlaylist('Blue Archive Original Soundtrack Vol.4 ～Aiming for the ideal freedom～', 'music/vol4/')">
+    <img src="vol4.jpg" alt="Blue Archive Vol4 Album Cover">
+    <h3>Blue Archive Original Soundtrack Vol.4 ～Aiming for the ideal freedom～</h3>
+    <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+</div>
+<div class="playlist-item" onclick="loadPlaylist('Blue Archive In-Game Soundtracks  ～The Cyan Sky of Kivotos～', 'music/others/')">
+    <img src="others.jpg" alt="Blue Archive In-Game Soundtracks Album Cover">
+    <h3>Blue Archive In-Game Soundtracks ～The Cyan Sky of Kivotos～</h3>
+    <p>Various Artists (Nor, Mitsukiyo, KARUT)</p>
+</div>
+<div class="playlist-item" onclick="loadPlaylist('Japanese Time', 'music/X_S/')">
+    <img src="X_S.jpg" alt="Mango">
+    <h3>Japanese Time</h3>
+    <p>Various Artists | Playlist by X_S</p>
+</div>
+<div class="playlist-item" onclick="loadPlaylist('My Longest Playlist Ever Made', 'music/Tear In My Heart/')">
+    <img src="tearinmyheart.png" alt="Blurry face album cover">
+    <h3>My Longest Playlist Ever Made</h3>
+    <p>Various Artists | Playlist by ShidoNats</p>
+</div>
+</div>
+</div>
+    `;
+    
+    document.getElementById("container").innerHTML = homeContent;
+}
+
+// Call loadHome() when the page loads
+window.onload = loadHome;
+
+// Add click event listener to the Spotify logo to load home
+document.getElementById("spotifyLogo").addEventListener("click", loadHome);
+
+// Wait for the DOM content to be fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the Spotify logo image element
+    var spotifyLogo = document.getElementById("spotifyLogo");
+
+    // Attach click event listener to the Spotify logo image
+    spotifyLogo.addEventListener("click", loadHome);
+});
+
+function subscribe() {
+    // Get the selected subscription plan
+    var subscriptionSelect = document.getElementById('subscription-plans');
+    var selectedPlan = subscriptionSelect.value;
+
+    // Get the selected mode of payment
+    var paymentSelect = document.getElementById('mode-of-payment');
+    var selectedPayment = paymentSelect.value;
+
+    // Perform validation for subscription plan and mode of payment
+    if (selectedPlan === 'Invalid Choice, Please Pick a Valid Choice Below' || 
+        selectedPayment === 'Invalid Choice, Please Pick a Valid Choice Below' || 
+        (selectedPayment === 'Kidney' && !confirm("Are you sure you want to pay with a kidney?"))) {
+        alert('Please select a valid subscription plan and mode of payment.');
+        return;
+    }
+
+    // Simulate processing payment (replace this with actual payment processing logic)
+    setTimeout(function() {
+        // Display success message
+if (selectedPayment === 'Kidney') {
+    // Ask for confirmation
+    
+    var confirmed = confirm("Please reconsider. We don't require kidneys as payment. Are you still interested in purchasing " + selectedPlan + " using your kidney?");
+    
+    // Check user's response
+    if (confirmed) {
+        // User confirmed
+        var decision = prompt("Thank you for your interest, but we STILL cannot accept kidneys as payment. Please select another mode of payment. Type 'Continue' to proceed or 'Cancel' to cancel.");
+        
+        // Check user's decision
+        if (decision.toLowerCase() === 'continue') {
+            if (decision.toLowerCase() === 'continue') {
+    // Continue with another choice
+    var confirmChoice = confirm("Are you sure you want to continue?");
+    if (confirmChoice) {
+        // User clicked OK in the confirmation dialog
+        var finalConfirmChoice = confirm("This is your final choice. Do you really want to sacrifice a kidney just for a streaming service?");
+        if (finalConfirmChoice) {
+            // Load the video onto the container
+            var container = document.getElementById('container');
+            container.innerHTML = `
+                <video width="100%" height="auto" controls autoplay>
+                    <source src="paywithyourfuckingkidneys.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <H3>Please Don't Pay With Your Kidneys, There's Still A Reason For You To Live<H3>
+                <p>Never Gonna Give You Up - Rick Astley</p>
+            `;
+        } else {
+            // User clicked Cancel in the final confirmation dialog
+            alert("You decided not to load the video.");
+        }
+    } else {
+        // User clicked Cancel in the confirmation dialog
+        alert("You decided not to continue.");}}
+        } else if (decision.toLowerCase() === 'Cancel') {
+            // Cancelled
+            alert("Thank you for understanding. Please select another mode of payment for your subscription.");
+        } else {
+            // Invalid input
+            alert("Invalid input. Please try again.");
+        }
+    } else {
+        // User declined
+        alert("Thank you for understanding. Please select another mode of payment for your subscription.");
+    }
+} else {
+    // Subscription successful message for other modes of payment
+    alert('Subscription successful! You are now subscribed to ' + selectedPlan + ' Plan' + ' using ' + selectedPayment + '.');
+}
+        // Reset the subscription and payment select boxes
+        subscriptionSelect.selectedIndex = 0;
+        paymentSelect.selectedIndex = 0;
+    }, 2000); // Simulate a delay of 2 seconds for processing
+}
+</script>
+</body>
+</html>
